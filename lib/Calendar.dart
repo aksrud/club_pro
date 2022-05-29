@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:club_pro/event.dart';
+import 'package:club_pro/Event.dart';
 // 달력 라이브러리
 import 'package:table_calendar/table_calendar.dart';
 
@@ -17,6 +17,7 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
+
     // Scaffold로 반환
     return Scaffold(
       // 달력 생성
@@ -85,8 +86,7 @@ class _CalendarState extends State<Calendar> {
       // float 버튼
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){Navigator.pop(context);},
-        label: Text("write"),
-        icon: Icon(Icons.add),
+        label: Text("back to write"),
       ),
     );
   }

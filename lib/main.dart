@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 // 달력있는 부분 소스코드
 import 'Calendar.dart';
+// 저장 버튼
+import 'SaveButton.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(const MyApp()));
@@ -23,41 +25,42 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       // 앱이 처음 실행 될때 뜨는 컨테이너 추가
-      home: Container(
-        // 이미지 추가
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/note.jpg'),
-            fit: BoxFit.cover
-            ),
-        ),
+      home: Scaffold(
+        // 배경
+        backgroundColor: Color.fromRGBO(230, 244, 253, 1),
 
-        // 다른 요소를 만들기 위해 Container에 Scaffold를 넣음 
-        child: Scaffold(
-          // 배경 투명(아까 배경 이미지 보이게 하기 위해)
-          backgroundColor: Colors.transparent,
-
-          // 앱 바 부분
-          appBar: AppBar(
-            centerTitle: true,
-            // 현재 시간을 구하는 함수를 호출, 반환해 Text로 만듬
-            title: Text("${getToday()}"),
-            // 앱 바 왼쪽 부분
-            leading: Builder(
-              builder: (context) {
-                // 아이콘 버튼을 누름면 달력 화면으로 이동
-                return IconButton(
-                  icon: Icon(Icons.menu),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => Calendar()));
-                  }
-                );
-              }
-            ),
+        // 앱 바 부분
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Color.fromRGBO(218, 203, 227, 1),
+          elevation: 0,
+          // 현재 시간을 구하는 함수를 호출, 반환해 Text로 만듬
+          title: Text("${getToday()}", style: TextStyle(color: Color.fromRGBO(173, 140, 191, 1)),),
+          // 앱 바 왼쪽 부분
+          leading: Builder(
+            builder: (context) {
+              // 아이콘 버튼을 누름면 달력 화면으로 이동
+              return IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => Calendar()));
+                }
+               );
+            }
           ),
-          body: Text("aa"),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: Builder(
+                builder: (context) {
+                  return SaveButton();
+                }
+              )
+            )
+          ],
         ),
-      )
+        body: Text("aa")
+      ),
     );
   }
 }
