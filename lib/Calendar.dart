@@ -86,7 +86,7 @@ class _CalendarState extends State<Calendar> {
       // float 버튼
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){Navigator.pop(context);},
-        label: Text("back to write"),
+        label: Text("go to write"),
       ),
     );
   }
