@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+// 파일에 데이터 저장
+import 'Storage.dart';
 
-class SaveButton extends StatelessWidget {
-  const SaveButton({Key? key}) : super(key: key);
+class SaveButton extends StatefulWidget {
+  final TextEditingController controller;
+  final Storage storage;
+  const SaveButton({Key? key, required this.controller, required this.storage}) : super(key: key);
 
+  @override
+  State<SaveButton> createState() => _SaveButtonState();
+}
+
+class _SaveButtonState extends State<SaveButton> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -22,6 +31,8 @@ class SaveButton extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
+                    // 글을 저장
+                    widget.storage.writeData(widget.controller.text);
                     showDialog(
                       context: context,
                       builder: (_) {

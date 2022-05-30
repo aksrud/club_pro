@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'SaveButton.dart';
 import 'Storage.dart';
-// 입출력
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 
 class TextFields extends StatefulWidget {
   final Storage storage;
@@ -17,8 +15,6 @@ class _TextFieldsState extends State<TextFields> {
   TextEditingController controller = TextEditingController();
   // 현재 값
   String? state;
-  // 파일 위치
-  Future<Directory>? _appDocDir;
 
   // 파일 값을 가져오기
   @override
@@ -26,24 +22,10 @@ class _TextFieldsState extends State<TextFields> {
     widget.storage.readData().then((String value){
       setState(() {
         state = value;
+        controller.text=value;
       });
     });
     super.initState();
-  }
-
-  // textfield값을 현재 값에 넣기
-  Future<File> writeData() async{
-  setState(() {
-      state = controller.text;
-    });
-    return widget.storage.writeData(state!);
-  }
-
-  // 파일 위치 구하는 메서드
-  void getAppDirectory(){
-    setState(() {
-      _appDocDir = getApplicationDocumentsDirectory();
-    });
   }
 
   // textfield 표현
@@ -52,6 +34,12 @@ class _TextFieldsState extends State<TextFields> {
     return Center(
       child: Column(
         children: [
+          // 저장 버튼
+          SaveButton(
+            controller: controller,
+            storage: widget.storage,
+          ),
+          // 글 쓰는 곳
           TextField(
             controller: controller,
             maxLines: 10,

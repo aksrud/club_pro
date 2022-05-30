@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:club_pro/Event.dart';
+import 'Event.dart';
 // 달력 라이브러리
 import 'package:table_calendar/table_calendar.dart';
 

@@ -75,17 +75,6 @@ class _MyAppState extends State<MyApp> {
                );
             }
           ),
-          // 저장 버튼(데이터 저장은 안됨)
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Builder(
-                builder: (context) {
-                  return SaveButton();
-                }
-              )
-            )
-          ],
         ),
         // 입력 구간
         body: TextFields(storage: Storage(getday(day)),),
