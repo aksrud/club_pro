@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+// 이벤트 객체
 import 'Event.dart';
 // 달력 라이브러리
 import 'package:table_calendar/table_calendar.dart';
-
+// 파일 입풀력
+import 'Storage.dart';
+// 날짜정보를 String 형식으로 바꿔줌
+import 'package:intl/intl.dart';
+// 메인 화면
+import 'main_screen.dart';
 class Calendar extends StatefulWidget {
   const Calendar({Key? key}) : super(key: key);
 
@@ -14,6 +20,36 @@ class _CalendarState extends State<Calendar> {
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
+  Storage storage = Storage("day");
+
+  //데이터 초기화(setstate라고 생각)
+  @override
+  void initState() {
+    storage.readData().then((String value){
+      setState(() {
+        focusedDay = DateTime(
+          int.parse(value.substring(0, 4)),
+          int.parse(value.substring(5, 7)),
+          int.parse(value.substring(8, 10)),
+        );
+        selectedDay = DateTime(
+          int.parse(value.substring(0, 4)),
+          int.parse(value.substring(5, 7)),
+          int.parse(value.substring(8, 10)),
+        );
+      });
+    });
+    selectedEvents = {};
+    super.initState();
+  }
+  
+  // 데이터 저장 형식
+  late Map<DateTime, List<Event>> selectedEvents;
+
+  // 이벤트 반환
+  List<Event> _getEventsfromDay(DateTime day) {
+    return selectedEvents[day] ?? [];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +76,8 @@ class _CalendarState extends State<Calendar> {
               setState(() {
                 selectedDay = selectDay;
                 focusedDay = focusDay;
+                storage.writeData("${getday(selectDay)}");
+                
               });
             },
             selectedDayPredicate: (DateTime day) {
@@ -85,23 +123,19 @@ class _CalendarState extends State<Calendar> {
       ),
       // float 버튼
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: (){Navigator.pop(context);},
+        onPressed: (){
+          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(builder: ((context) => main_screen())));
+        },
         label: Text("go to write"),
       ),
     );
   }
-  // 데이터 저장 형식
-  late Map<DateTime, List<Event>> selectedEvents;
-
-  //데이터 초기화(setstate라고 생각)
-  @override
-  void initState() {
-    selectedEvents = {};
-    super.initState();
-  }
-
-  // 이벤트 반환
-  List<Event> _getEventsfromDay(DateTime day) {
-    return selectedEvents[day] ?? [];
+  
+  // 시간을 구하는 함수
+  String getday(var day) {
+    DateTime now = day;
+    String formatter = DateFormat("yyyy.MM.dd").format(now);
+    return formatter;
   }
 }
