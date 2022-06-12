@@ -13,19 +13,22 @@ class TextFields extends StatefulWidget {
 
 class _TextFieldsState extends State<TextFields> {
   
-  // textfield 값 받기
+  // textfield 값을 받는 변수
   TextEditingController controller = TextEditingController();
 
   // 현재 값
   String? state;
 
-  Storage storage_d = Storage("day");
+  // 선택한 날짜
+  Storage day = Storage("day");
+  
+  // 글을 불러오는 곳
   Storage storage = Storage("");
 
   // 파일 값을 가져오기
   @override
   void initState(){
-    storage_d.readData().then((String a){
+    day.readData().then((String a){
       setState(() {
         storage = Storage(a);
       });
@@ -57,9 +60,18 @@ class _TextFieldsState extends State<TextFields> {
             controller: controller,
           ),
           // 글 쓰는 곳
-          TextField(
-            controller: controller,
-            maxLines: 10,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+            child: TextField(
+              controller: controller,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText: '내용을 입력하세요',
+                border: InputBorder.none
+              ),
+            ),
           ),
         ]
       ),

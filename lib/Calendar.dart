@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+
 // 이벤트 객체
 import 'Event.dart';
+
 // 달력 라이브러리
 import 'package:table_calendar/table_calendar.dart';
-// 파일 입풀력
+
+// 파일 입출력
 import 'Storage.dart';
-// 날짜정보를 String 형식으로 바꿔줌
-import 'package:intl/intl.dart';
+
 // 메인 화면
-import 'main_screen.dart';
+import 'screen.dart';
+
+// 시간을 글로 바꾸기
+import 'getday.dart';
+
 class Calendar extends StatefulWidget {
   const Calendar({Key? key}) : super(key: key);
 
@@ -17,37 +23,56 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
+  // 달력 형식
   CalendarFormat format = CalendarFormat.month;
+  // 선택한 날짜
   DateTime selectedDay = DateTime.now();
+  // 현재 목표 날짜
   DateTime focusedDay = DateTime.now();
+  // 현재 선택한 날짜 저장
   Storage storage = Storage("day");
+  // 아이콘 불러오는 곳
+  Storage emotion = Storage("");
 
-  //데이터 초기화(setstate라고 생각)
+  // 데이터 저장 형식
+  Map<String, List<Event>> selectedEvents = {};
+
+  //데이터 초기화
   @override
   void initState() {
+    nogada();
     storage.readData().then((String value){
       setState(() {
-        focusedDay = DateTime(
+        DateTime time = DateTime(
           int.parse(value.substring(0, 4)),
           int.parse(value.substring(5, 7)),
           int.parse(value.substring(8, 10)),
         );
-        selectedDay = DateTime(
-          int.parse(value.substring(0, 4)),
-          int.parse(value.substring(5, 7)),
-          int.parse(value.substring(8, 10)),
-        );
+        focusedDay = time;
       });
     });
-    selectedEvents = {};
     super.initState();
   }
   
-  // 데이터 저장 형식
-  late Map<DateTime, List<Event>> selectedEvents;
+  void event_add(String day){
+    String icon = "";
+    emotion = Storage("${day}_icon");
+    emotion.readData().then((String a){
+      if(a ==""){
+        return;
+      }
+      setState(() {
+        icon = a;
+        selectedEvents[day] = [
+          Event(name: icon),
+        ];
+      });
+    });
+    setState(() {});
+  }
 
   // 이벤트 반환
-  List<Event> _getEventsfromDay(DateTime day) {
+  List<Event> _getEventsfromDay(String day) {
     return selectedEvents[day] ?? [];
   }
 
@@ -77,7 +102,6 @@ class _CalendarState extends State<Calendar> {
                 selectedDay = selectDay;
                 focusedDay = focusDay;
                 storage.writeData("${getday(selectDay)}");
-                
               });
             },
             selectedDayPredicate: (DateTime day) {
@@ -110,32 +134,40 @@ class _CalendarState extends State<Calendar> {
             ),
 
             // 이벤트 처리
-            eventLoader: _getEventsfromDay,
+            eventLoader: (day) {
+              return _getEventsfromDay(getday(day));
+            },
           ),
           // 리스트 뷰
-          ..._getEventsfromDay(selectedDay).map((Event event) => ListTile(
-            leading: Image.asset(event.title),
-            title: Text("aa"),
-            onTap: (){},
-            )
-          )
+          ..._getEventsfromDay(getday(selectedDay)).map((Event event) => ListTile(leading: Image.asset(event.name),)),
         ],
       ),
       // float 버튼
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){
           Navigator.pop(context);
-          Navigator.push(context, MaterialPageRoute(builder: ((context) => main_screen())));
+          Navigator.push(context, MaterialPageRoute(builder: ((context) => screen())));
         },
         label: Text("go to write"),
       ),
     );
   }
-  
-  // 시간을 구하는 함수
-  String getday(var day) {
-    DateTime now = day;
-    String formatter = DateFormat("yyyy.MM.dd").format(now);
-    return formatter;
+
+  void nogada(){
+    for(int i=1; i<=12; i++){
+      if(i==4||i==6||i==9||i==11){
+        for(int j=1; j<=30; j++){
+          event_add(getday(DateTime(2022, i, j)));
+        }
+      } else if(i==2){
+        for(int j=1; j<=28; j++){
+          event_add(getday(DateTime(2022, i, j)));
+        }
+      } else{
+        for(int j=1; j<=31; j++){
+          event_add(getday(DateTime(2022, i, j)));
+        }
+      }
+    }
   }
 }

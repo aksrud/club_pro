@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // 메인 화면
-import 'main_screen.dart';
+import 'screen.dart';
 // 위치 초기화
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -13,6 +13,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return main_screen();
+    return screen();
   }
 }

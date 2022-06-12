@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
+// 시간을 글로 바꾸기
+import 'getday.dart';
+
 // 파일에 데이터 저장
 import 'Storage.dart';
-// 날짜정보를 String 형식으로 바꿔줌
-import 'package:intl/intl.dart';
 
 class SaveButton extends StatefulWidget { 
   final TextEditingController controller;
@@ -13,31 +15,27 @@ class SaveButton extends StatefulWidget {
 }
 
 class _SaveButtonState extends State<SaveButton> {
+
+  // 선택한 날짜
   Storage day = Storage("day");
+
+  // 선택한 날짜에 저장된 글
   Storage storage = Storage("");
+
+  // 선택한 날짜에 저장된 아이콘
   Storage s_day = Storage("");
 
   @override
   void initState() {
     day.readData().then((String value){
-      String a = "";
-      if (value == ""){
-        setState(() {
-          a = getday(DateTime.now());
-          storage = Storage(a);
-          s_day = Storage("${a}_icon");
-        });
-      }
-      else {
-        setState(() {
-          storage = Storage(value);
-          s_day = Storage("${value}_icon");
-        });
-      }
+      setState(() {
+        storage = Storage(value);
+        s_day = Storage("${value}_icon");
+      });
     });
     super.initState();
   }
-
+  // 데이터 저장
   @override
   Widget build(BuildContext ctx) {
     return IconButton(
@@ -75,21 +73,27 @@ class _SaveButtonState extends State<SaveButton> {
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(_);
-                                s_day.writeData("images/angry.png");
+                                s_day.writeData("images/disappoint.png");
                               },
-                              child: Image.asset("images/angry.png")),
+                              child: Image.asset("images/disappoint.png")),
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(_);
-                                s_day.writeData("images/angry.png");
+                                s_day.writeData("images/happy.png");
                               },
-                              child: Image.asset("images/angry.png")),
+                              child: Image.asset("images/happy.png")),
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(_);
-                                s_day.writeData("images/angry.png");
+                                s_day.writeData("images/none.png");
                               },
-                              child: Image.asset("images/angry.png")),
+                              child: Image.asset("images/none.png")),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(_);
+                                s_day.writeData("images/sad.png");
+                              },
+                              child: Image.asset("images/sad.png")),
                           ],
                         );
                       }
@@ -103,12 +107,6 @@ class _SaveButtonState extends State<SaveButton> {
         );
       }
     );
-  }
-  // 시간을 구하는 함수
-  String getday(var day) {
-    DateTime now = day;
-    String formatter = DateFormat("yyyy.MM.dd").format(now);
-    return formatter;
   }
 }
 
