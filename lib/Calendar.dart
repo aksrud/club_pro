@@ -10,7 +10,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'Storage.dart';
 
 // 메인 화면
-import 'screen.dart';
+import 'main.dart';
 
 // 시간을 글로 바꾸기
 import 'getday.dart';
@@ -146,7 +146,7 @@ class _CalendarState extends State<Calendar> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){
           Navigator.pop(context);
-          Navigator.push(context, MaterialPageRoute(builder: ((context) => screen())));
+          Navigator.push(context, MaterialPageRoute(builder: ((context) => Screen())));
         },
         label: Text("go to write"),
       ),

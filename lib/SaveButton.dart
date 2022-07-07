@@ -28,10 +28,18 @@ class _SaveButtonState extends State<SaveButton> {
   @override
   void initState() {
     day.readData().then((String value){
-      setState(() {
-        storage = Storage(value);
-        s_day = Storage("${value}_icon");
-      });
+      if(value!=""){
+        setState(() {
+          storage = Storage(value);
+          s_day = Storage("${value}_icon");
+        });
+      }
+      else{
+        setState(() {
+          storage = Storage(getday(DateTime.now()));
+          s_day = Storage("${getday(DateTime.now())}_icon");
+        });
+      }
     });
     super.initState();
   }
@@ -69,31 +77,31 @@ class _SaveButtonState extends State<SaveButton> {
                                 Navigator.pop(_);
                                 s_day.writeData("images/angry.png");
                               },
-                              child: Image.asset("images/angry.png")),
+                              child: Image.asset("images/angry.png", width: 200, height: 200, fit: BoxFit.fill)),
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(_);
                                 s_day.writeData("images/disappoint.png");
                               },
-                              child: Image.asset("images/disappoint.png")),
+                              child: Image.asset("images/disappoint.png", width: 200, height: 200, fit: BoxFit.fill)),
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(_);
                                 s_day.writeData("images/happy.png");
                               },
-                              child: Image.asset("images/happy.png")),
+                              child: Image.asset("images/happy.png", width: 200, height: 200, fit: BoxFit.fill)),
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(_);
                                 s_day.writeData("images/none.png");
                               },
-                              child: Image.asset("images/none.png")),
+                              child: Image.asset("images/none.png", width: 200, height: 200, fit: BoxFit.fill)),
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(_);
                                 s_day.writeData("images/sad.png");
                               },
-                              child: Image.asset("images/sad.png")),
+                              child: Image.asset("images/sad.png", width: 200, height: 200, fit: BoxFit.fill)),
                           ],
                         );
                       }
